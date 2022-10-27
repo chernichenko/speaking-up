@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -7,34 +6,28 @@ import { toast } from 'react-toastify'
 import { InputForm, Button } from 'components'
 
 import styles from '../Auth.module.scss'
+import Timezone from 'components/Form/Timezone/Timezone'
 
 const validationSchema = () => {
     return Yup.object({
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Required'),
         name: Yup.string()
             .min(3, 'Too Short!')
             .required('Required'),
         password: Yup.string()
             .min(6, 'Too Short!')
             .required('Required'),
-        email: Yup.string()
-            .email('Invalid email')
-            .required('Required'),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match'),
     })
 }
 
 export const Registration = () => {
     const history = useHistory()
 
-    const [file, setFile] = useState<any>()
-
     const onSubmit = async (values: any) => {
-        let formData = new FormData()
-        for (let key in values) {
-            formData.append(key, values[key])
-        }
-
-        formData.append('file', file)
-
         try {
             console.log('values', values)
             // await axios.post('/api/auth/register', formData)
@@ -48,7 +41,15 @@ export const Registration = () => {
     return (
         <div className={styles.wrap} data-testid="registration">
             <Formik
-                initialValues={{ name: '', email: '', password: '', file: '' }}
+                initialValues={
+                    {
+                        email: '',
+                        name: '',
+                        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                        password: '',
+                        confirmPassword: '',
+                    }
+                }
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             >
@@ -59,13 +60,16 @@ export const Registration = () => {
                                 <Link to="/">Back</Link>
                             </div>
                             <InputForm
-                                name={'name'}
-                                placeholder={'Enter your name'}
-                            />
-                            <InputForm
                                 name={'email'}
                                 type={'email'}
                                 placeholder={'Enter your email'}
+                            />
+                            <InputForm
+                                name={'name'}
+                                placeholder={'Enter your discord username'}
+                            />
+                            <Timezone
+                                name={'timezone'}
                             />
                             <InputForm
                                 name={'password'}
@@ -73,9 +77,9 @@ export const Registration = () => {
                                 placeholder={'Enter your password'}
                             />
                             <InputForm
-                                name={'file'}
-                                type={'file'}
-                                onFileChange={setFile}
+                                name={'confirmPassword'}
+                                type={'password'}
+                                placeholder={'Repeat your password'}
                             />
                             <Button
                                 onClick={handleSubmit}

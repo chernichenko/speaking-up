@@ -28,7 +28,7 @@ export const InputForm: FC<IInputFormProps> = ({
 
   return (
     <Field name={name}>
-      {({ field, meta }: IInputRender) => {
+      {({ field, meta    }: IInputRender) => {
 
         const onFileChangeHandler = (e: any) => {
           const file = e.target.files[0]
