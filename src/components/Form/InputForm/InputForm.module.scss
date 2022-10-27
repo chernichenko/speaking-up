@@ -1,0 +1,38 @@
+@import 'assets/default/vars.scss';
+
+.inputWrapper {
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid $main;
+    outline: none;
+    color: $main;
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover, 
+    &:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px white inset;
+    }
+
+    &.file {
+        display: none;
+    }
+}
+
+.label {
+    color: $main;
+}
+
+.error {
+    border: 1px solid red;
+    color: red;
+}
+
+.errorMessage {
+    font-size: 14px;
+    color: red;
+    margin-top: 10px;
+}
