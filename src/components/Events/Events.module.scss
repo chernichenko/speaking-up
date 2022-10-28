@@ -4,7 +4,7 @@
 }
 
 .eventsWrap {
-    margin-top: 36px;
+    margin-top: 12px;
 }
 
 .event {
@@ -37,4 +37,64 @@
     height: 36px;
     background: blueviolet;
     border-radius: 50%;
+}
+
+.getMoreWrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;    
+}
+
+.getMore {
+    margin-top: 36px;
+    .text {
+        color: white;
+        cursor: pointer;
+        margin-bottom: 12px;
+        text-align: right;
+    }
+}
+
+.popup {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    top: 7px;
+    right: 10px;
+}
+
+.top {
+    color: grey;
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+.calcWrap {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    div {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    input {
+        margin: 0 5px;
+    }
+}
+
+.save {
+    color: grey;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }

@@ -1,18 +1,49 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { getEvents } from 'redux/selectors'
+import { SAVE_STATE } from 'redux/actions'
+import { removeEvent, changeEventsPerWeekCount } from 'redux/reducers/eventsSlice'
+import Tabs from 'components/Tabs/Tabs'
 
 import styles from './Events.module.scss'
-import { removeEvent } from 'redux/reducers/eventsSlice'
-import Tabs from 'components/Tabs/Tabs'
 
 export const Events = () => {
     const dispatch = useDispatch()
     const events = useSelector(getEvents)
+    const meetingsCountFromStore = useSelector((s: any) => s.events.eventsPerWeek)
+    const [showMoreMeetings, setShowMoreMeetings] = useState(false)
+    const [meetingsCount, setMeetingsCount] = useState(meetingsCountFromStore)
+
+    const onChangeHandler = (value: any) => {
+        const count = value?.target?.value ? value.target.value : value
+        if (count > 0 && count < 100) {
+            setMeetingsCount(count)
+        }
+    }
 
     return (
         <div className={styles.wrap}>
             <Tabs />
+            <div className={styles.getMoreWrap}>
+                <div className={styles.getMore}>
+                    <div className={styles.text} onClick={() => setShowMoreMeetings(true)}>+ Get more meetings</div>
+                    {showMoreMeetings && (<div className={styles.popup}>
+                        <div className={styles.close} onClick={() => setShowMoreMeetings(false)}>x</div>
+                        <div className={styles.top}>How many meetings you want to have?</div>
+                        <div className={styles.calcWrap}>
+                            <div className={styles.minus} onClick={() => onChangeHandler(meetingsCount - 1)}>-</div>
+                            <input type="number" min={1} max={100} value={meetingsCount} onChange={onChangeHandler} />
+                            <div className={styles.plus} onClick={() => onChangeHandler(meetingsCount + 1)}>+</div>
+                        </div>
+                        <div className={styles.save} onClick={() => {
+                            dispatch(changeEventsPerWeekCount(meetingsCount))
+                            dispatch({ type: SAVE_STATE })
+                            setShowMoreMeetings(false)
+                        }}>Save</div>
+                    </div>)}
+                </div>
+            </div>
             {events?.length ? (
                 <div className={styles.eventsWrap}>
                     {events.map((event) => {
