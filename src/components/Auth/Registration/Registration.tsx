@@ -1,12 +1,14 @@
 import { Link, useHistory } from 'react-router-dom'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-// import axios from 'axios'
 import { toast } from 'react-toastify'
 import { InputForm, Button } from 'components'
+import Timezone from 'components/Form/Timezone/Timezone'
+import useGoogle from 'hooks/useGoogle'
+import { GoogleLogin } from 'react-google-login'
+import { GOOGLE_CLIENT_ID } from '../../../constants'
 
 import styles from '../Auth.module.scss'
-import Timezone from 'components/Form/Timezone/Timezone'
 
 const validationSchema = () => {
     return Yup.object({
@@ -26,6 +28,7 @@ const validationSchema = () => {
 
 export const Registration = () => {
     const history = useHistory()
+    const { onGoogleSuccess, onGoogleFailure } = useGoogle()
 
     const onSubmit = async (values: any) => {
         try {
@@ -87,6 +90,21 @@ export const Registration = () => {
                             >
                                 Sign up
                             </Button>
+
+                            <div className={styles.loginWithGoogle}>
+                                <div className={styles.or}>OR</div>
+
+                                <div className={styles.googleButtonsWrap}>
+                                    <GoogleLogin
+                                        clientId={GOOGLE_CLIENT_ID}
+                                        onSuccess={onGoogleSuccess}
+                                        onFailure={onGoogleFailure}
+                                        buttonText="Sign up with Google"
+                                        cookiePolicy="single_host_origin"
+                                        isSignedIn={true}
+                                    />
+                                </div>
+                            </div>
                         </Form>
                     )
                 }}

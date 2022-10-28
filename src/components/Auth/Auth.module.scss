@@ -42,3 +42,34 @@
         color: $main;
     }
 }
+
+.buttonsWrap {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+        width: calc(50% - 6px);
+    }
+}
+
+.loginWithGoogle {
+    .or {
+        text-align: center;
+        margin: 10px 0;
+        font-size: 12px;
+    }
+
+    .googleButtonsWrap {
+        button {
+            width: 100%;
+            height: 35.5px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+
+            > div {
+                padding: 2px !important;
+            }
+        }
+    }
+}

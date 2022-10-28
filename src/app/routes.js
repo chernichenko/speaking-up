@@ -4,8 +4,10 @@ import {
   Registration,
   ChangePassword,
   ChangePasswordSuccess,
-  Main,
   Profile,
+  EmailConfirm,
+  Events,
+  Calendar,
 } from 'components'
 import { MainLayout } from 'layouts'
 
@@ -29,6 +31,10 @@ export const publicRoutes = [
     component: ChangePasswordSuccess,
   },
   {
+    path: '/email-confirm',
+    component: EmailConfirm,
+  },
+  {
     component: () => <Redirect to="/" />,
   },
 ]
@@ -37,19 +43,25 @@ export const privateRoutes = [
   {
     path: '/',
     exact: true,
-    component: Main,
-    layout: MainLayout,
-  },
-  {
-    path: '/dialog/:userToId',
-    exact: true,
-    component: Main,
+    component: Events,
     layout: MainLayout,
   },
   {
     path: '/profile',
     exact: true,
     component: Profile,
+    layout: MainLayout,
+  },
+  {
+    path: '/events',
+    exact: true,
+    component: Events,
+    layout: MainLayout,
+  },
+  {
+    path: '/calendar',
+    exact: true,
+    component: Calendar,
     layout: MainLayout,
   },
   {

@@ -3,10 +3,12 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-// import axios from 'axios'
 import { InputForm, Button } from 'components'
 import { changeUser } from 'redux/reducers/authSlice'
 import { SAVE_STATE } from 'redux/actions'
+import { GoogleLogin } from 'react-google-login'
+import { GOOGLE_CLIENT_ID } from '../../../constants'
+import useGoogle from 'hooks/useGoogle'
 
 import styles from '../Auth.module.scss'
 
@@ -28,10 +30,11 @@ type submitValues = {
 
 export const Login = () => {
     const dispatch = useDispatch()
+    const { onGoogleSuccess, onGoogleFailure } = useGoogle()
 
     const onSubmit = async (values: submitValues) => {
         try {
-            dispatch(changeUser({ ...values, id: values.email }))
+            dispatch(changeUser({ ...values, id: values.email, name: 'Alex Che', timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }))
             dispatch({ type: SAVE_STATE })
         } catch(e) {
             toast.error(e)
@@ -70,6 +73,21 @@ export const Login = () => {
                             >
                                 Sign in
                             </Button>
+
+                            <div className={styles.loginWithGoogle}>
+                                <div className={styles.or}>OR</div>
+
+                                <div className={styles.googleButtonsWrap}>
+                                    <GoogleLogin
+                                        clientId={GOOGLE_CLIENT_ID}
+                                        onSuccess={onGoogleSuccess}
+                                        onFailure={onGoogleFailure}
+                                        buttonText="Log in with Google"
+                                        cookiePolicy="single_host_origin"
+                                        isSignedIn={true}
+                                    />
+                                </div>
+                            </div>
 
                             <div className={styles.bottom}>
                                 <p>Don't have an account?</p>

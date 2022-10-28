@@ -10,10 +10,11 @@ import styles from './App.module.scss'
 const App = () => {
   const user = useSelector(getUser)
   const { id } = user
-
-  console.log('user', user)
-  
   const [isPublickRoutes, setIsPublickRoutes] = useState(!id)
+
+  useEffect(() => {
+    console.log('user', user)
+  }, [user])
 
   useEffect(() => {
     setIsPublickRoutes(!id)

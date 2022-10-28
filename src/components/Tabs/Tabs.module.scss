@@ -1,0 +1,34 @@
+@import 'assets/default/vars.scss';
+
+.top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.tabs {
+  background: white;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+
+  .tab {
+    display: block;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border-radius: 20px;
+    margin: 0 2px;
+    text-decoration: none;
+    color: black;
+
+    &.active {
+      background: $main;
+      color: white;
+    }
+  }
+}
