@@ -31,15 +31,11 @@ export const Header = () => {
 
     return (
         <div className={styles.header} data-testid="header">
-            <div className={styles.logo}>
-                {!!user?.avatarUrl && (
-                    <div className={styles.imageWrap}>
-                        <img src={user.avatarUrl} alt="avatar" data-testid="avatar" />  
-                    </div>
-                )}
-                <p>{user?.name}</p>
+            <div>
+                <h3>Speaking Up</h3>
             </div>
             <div className={styles.nav}>
+                <NavLink to="/">Events</NavLink>
                 <NavLink to="/profile">Profile</NavLink>
                 <NavLink to="/" onClick={logoutHandler}>Logout</NavLink>
             </div>

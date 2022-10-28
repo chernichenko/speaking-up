@@ -34,7 +34,7 @@ export const Login = () => {
 
     const onSubmit = async (values: submitValues) => {
         try {
-            dispatch(changeUser({ ...values, id: values.email }))
+            dispatch(changeUser({ ...values, id: values.email, name: 'Alex Che', timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }))
             dispatch({ type: SAVE_STATE })
         } catch(e) {
             toast.error(e)

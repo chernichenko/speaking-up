@@ -1,0 +1,40 @@
+.wrap {
+    height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+.eventsWrap {
+    margin-top: 36px;
+}
+
+.event {
+    padding: 10px 20px;
+    background: white;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.time {
+    margin-right: 10px;
+}
+
+.column1,
+.column2 {
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    margin-right: 10px;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    background: blueviolet;
+    border-radius: 50%;
+}
