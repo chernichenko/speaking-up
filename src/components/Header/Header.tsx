@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { clearUserInfo } from 'redux/reducers/authSlice'
 import { SAVE_STATE } from 'redux/actions'
 import { getUser } from 'redux/selectors'
+import { useGoogleLogout } from 'react-google-login'
+import { GOOGLE_CLIENT_ID } from '../../constants'
 
 import styles from './Header.module.scss'
 
@@ -13,6 +15,8 @@ export const Header = () => {
     const dispatch = useDispatch()
     const user = useSelector(getUser)
 
+    const { signOut } = useGoogleLogout({ clientId: GOOGLE_CLIENT_ID })
+
     const config = useMemo(() => ({ headers: { auth: `Che ${user?.token}` } }), [user?.token])
 
     const logoutHandler = useCallback(async (e: any) => {
@@ -20,6 +24,7 @@ export const Header = () => {
             e.preventDefault()
             dispatch(clearUserInfo())
             dispatch({ type: SAVE_STATE })
+            await signOut()
             history.push('/')
         } catch (e) { toast.error(e) }
     }, [config])
@@ -29,7 +34,7 @@ export const Header = () => {
             <div className={styles.logo}>
                 {!!user?.avatarUrl && (
                     <div className={styles.imageWrap}>
-                        <img src={user?.avatarUrl} alt="avatar" data-testid="avatar" />  
+                        <img src={user.avatarUrl} alt="avatar" data-testid="avatar" />  
                     </div>
                 )}
                 <p>{user?.name}</p>

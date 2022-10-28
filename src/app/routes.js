@@ -6,6 +6,7 @@ import {
   ChangePasswordSuccess,
   Main,
   Profile,
+  EmailConfirm,
 } from 'components'
 import { MainLayout } from 'layouts'
 
@@ -27,6 +28,10 @@ export const publicRoutes = [
   {
     path: '/password/:token',
     component: ChangePasswordSuccess,
+  },
+  {
+    path: '/email-confirm',
+    component: EmailConfirm,
   },
   {
     component: () => <Redirect to="/" />,
