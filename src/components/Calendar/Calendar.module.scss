@@ -27,6 +27,10 @@
     border: none;
     background: white !important;
 
+    &.column {
+      cursor: initial;
+    }
+
     .day {
       color: $gray;
       font-size: 14px;
@@ -35,7 +39,11 @@
 
     .numberOfDay {
       border-radius: 50%;
-      padding: 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 16px;
       color: $gray;
       cursor: pointer;
@@ -75,6 +83,11 @@
 
   &.first {
     border-top: none;
+    cursor: initial;
+
+    &:hover {
+      background: transparent;
+    }
 
     .time {
       font-size: 12px;
@@ -118,6 +131,45 @@
           transform: translate(-50%, -50%);
         }
       }
+    }
+  }
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  margin-left: 12.5%;
+  margin-bottom: 16px;
+
+  .arrowWrap {
+    display: flex;
+    margin-right: 16px;
+
+    > div {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:hover {
+        background: rgb(244, 244, 244);
+      }
+
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .date {
+    display: flex;
+    align-items: center;
+
+    .months {
+      margin-right: 8px;
     }
   }
 }
