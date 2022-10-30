@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { useSelector, useDispatch } from 'react-redux'
-// import { SAVE_STATE } from 'redux/actions'
+import { SAVE_STATE } from 'redux/actions'
 import Tabs from "components/Tabs/Tabs"
+import { addAvailableTime, removeAvailableTime } from "redux/reducers/eventsSlice"
 import cn from "classnames"
+import { toast } from 'react-toastify'
 
 import styles from './Calendar.module.scss'
-import { addAvailableTime } from "redux/reducers/eventsSlice"
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const DAYS_OF_WEEK = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
@@ -26,8 +27,6 @@ export const Calendar = () => {
   const [showPopup, setShowPopup] = useState(false)
   const dispatch = useDispatch()
   const availableTime = useSelector((s: any) => s.events.availableTime)
-
-  console.log('availableTime', availableTime)
 
   useEffect(() => {
     const today = new Date()
@@ -101,14 +100,38 @@ export const Calendar = () => {
     const selectedCoordTo = mooving.current.toY - zeroPoint
     const from = selectedCoordFrom <= selectedCoordTo ? selectedCoordFrom : selectedCoordTo
     const to = selectedCoordTo >= selectedCoordFrom ? selectedCoordTo : selectedCoordFrom
+
+    let couldCreateTime = true
+    const day = +event.target.getAttribute('data-day')
+    const month = +event.target.getAttribute('data-month')
+    const year = +event.target.getAttribute('data-year')
+    const rowFrom = +(from / ROW_HEIGHT + 1)
+    const rowTo = +(to / ROW_HEIGHT + 1)
+    availableTime?.forEach((time: any) => {
+      const dayWithAvailableTime = time.day === day && time.month === month && time.year === year
+      if (
+        dayWithAvailableTime &&
+        ((rowFrom >= time.rowFrom && rowFrom <= time.rowTo) ||
+        (rowTo >= time.rowFrom && rowTo <= time.rowTo) ||
+        (rowFrom < time.rowFrom && rowTo > time.rowTo)
+        )
+      ) {
+        couldCreateTime = false
+      }
+    })
+    if (!couldCreateTime) {
+      toast('The selected time is not available')
+      return
+    }
+
     setSelectedInfo({ selectedColumnIndex: mooving.current.selectedColumnIndex, from, to })
     isMooving.current = false
-
     setShowPopup(true)
   }
 
   const saveEventHandler = (data: any) => {
     dispatch(addAvailableTime(data))
+    dispatch({ type: SAVE_STATE })
     closePopup()
   }
 
@@ -116,6 +139,12 @@ export const Calendar = () => {
     mooving.current = { selectedColumnIndex: 0, fromY: 0, toY: 0 }
     setSelectedInfo({ selectedColumnIndex: 0, from: 0, to: 0 })
     setShowPopup(false)
+  }
+
+  const removeAvailableTimeHandler = (data: any) => {
+    dispatch(removeAvailableTime(data))
+    dispatch({ type: SAVE_STATE })
+    closePopup()
   }
 
   return (
@@ -185,22 +214,51 @@ export const Calendar = () => {
                     <div className={styles.time}>{time}</div>
                   </div>
                   {DAYS_OF_WEEK.map((_, columndIndex) => {
-                    const activeColumn = currentDay?.day === days[columndIndex]?.day && currentDay?.month === days[columndIndex]?.month
+                    const activeColumn = currentDay?.day === days[columndIndex]?.day && currentDay?.month === days[columndIndex]?.month && currentDay?.year === days[columndIndex]?.year
+                    const availableItem = availableTime.find((availableTimeItem: any) =>
+                      availableTimeItem.day === days[columndIndex]?.day &&
+                      availableTimeItem.month === days[columndIndex]?.month &&
+                      availableTimeItem.year === days[columndIndex]?.year &&
+                      rowIndex + 1 >= availableTimeItem.rowFrom &&
+                      rowIndex + 1 <= availableTimeItem.rowTo
+                    )
+                    const isAvailable = !!availableItem
+                    const isAvailableFrom = availableTime.find((availableTimeItem: any) =>
+                      availableTimeItem.day === days[columndIndex]?.day &&
+                      availableTimeItem.month === days[columndIndex]?.month &&
+                      availableTimeItem.year === days[columndIndex]?.year &&
+                      rowIndex + 1 === availableTimeItem.rowFrom
+                    )
+                    const isAvailableTo = availableTime.find((availableTimeItem: any) =>
+                      availableTimeItem.day === days[columndIndex]?.day &&
+                      availableTimeItem.month === days[columndIndex]?.month &&
+                      availableTimeItem.year === days[columndIndex]?.year &&
+                      rowIndex + 1 === availableTimeItem.rowTo
+                    )
                     const coordY = rowIndex * ROW_HEIGHT
+                    const isSelected = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY >= selectedInfo.from && coordY <= selectedInfo.to
+                    const isSelectedFrom = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from
+                    const isSelectedTo = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.to
                     return (
                       <div
                         key={columndIndex}
                         id={`row${rowIndex + 1}-column${columndIndex + 1}`}
                         data-column={columndIndex + 1}
+                        data-day={days[columndIndex]?.day}
+                        data-month={days[columndIndex]?.month}
+                        data-year={days[columndIndex]?.year}
                         className={
                           cn(
                             styles.column,
                             "tableItem",
                             activeColumn && styles.activeColumn,
                             columndIndex + 1 === DAYS_OF_WEEK.length && styles.last,
-                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY >= selectedInfo.from && coordY <= selectedInfo.to) && styles.selected,
-                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from) && styles.selectedFrom,
-                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.to) && styles.selectedTo,
+                            isSelected && styles.selected,
+                            isSelectedFrom && styles.selectedFrom,
+                            isSelectedTo && styles.selectedTo,
+                            !isSelected && isAvailable && styles.available,
+                            !isSelected && isAvailableFrom && styles.availableFrom,
+                            !isSelected && isAvailableTo && styles.availableTo,
                           )
                         }
                       >
@@ -211,12 +269,15 @@ export const Calendar = () => {
                               <div className={styles.close} onClick={closePopup}>x</div>
                               <div className={styles.top}>Now availability line</div>
                               <div className={styles.time}>{DAYS_OF_WEEK[columndIndex]}, {TIMES[selectedInfo.from / ROW_HEIGHT] || '0 AM'} - {TIMES[selectedInfo.to / ROW_HEIGHT + 1]}</div>
-                              <div className={styles.save} onClick={() => saveEventHandler({ column: columndIndex + 1, rowFrom: selectedInfo.from / ROW_HEIGHT + 1, rowTo: selectedInfo.to / ROW_HEIGHT + 1 })}>Save</div>
+                              <div className={styles.save} onClick={() => saveEventHandler({ ...days[columndIndex], rowFrom: selectedInfo.from / ROW_HEIGHT + 1, rowTo: selectedInfo.to / ROW_HEIGHT + 1 })}>Save</div>
                             </div>
                           </>
                         )}
                         {(activeRow && activeColumn) && (
                           <div id="timeLine" className={styles.timeLine} />
+                        )}
+                        {isAvailableFrom && (
+                          <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
                         )}
                       </div>
                     )

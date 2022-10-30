@@ -93,7 +93,24 @@
   &.selected {
     &::after {
       content: '';
-      background: $blue;
+      background: $blue !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 1px);
+      z-index: 15;
+    }
+
+    &:hover {
+      background: white;
+    }
+  }
+
+  &.available {
+    &::after {
+      content: '';
+      background: rgb(221, 221, 221);
       position: absolute;
       top: 0;
       left: 0;
@@ -107,14 +124,16 @@
     }
   }
 
-  &.selectedFrom {
+  &.selectedFrom,
+  &.availableFrom {
     &::after {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
   }
 
-  &.selectedTo {
+  &.selectedTo,
+  &.availableTo {
     &::after {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
@@ -259,4 +278,13 @@
     bottom: 10px;
     right: 10px;
   }
+}
+
+.removeAvailableTime {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  z-index: 50;
+  padding: 0px 5px;
+  cursor: pointer;
 }

@@ -27,7 +27,20 @@ const eventsSlice = createSlice({
       state.availableTime.push(payload)
     },
     removeAvailableTime(state: any, { payload }) {
-      state.availableTime = state.availableTime.filter((time: any) => time.column !== payload.column && time.rowFrom !== payload.rowFrom && time.rowTo !== payload.rowTo)
+      state.availableTime = state.availableTime
+        .map((time: any) => {
+          if (
+            time.day === payload.day &&
+            time.month === payload.month &&
+            time.year === payload.year &&
+            time.rowFrom === payload.rowFrom &&
+            time.rowTo === payload.rowTo
+          ) {
+            return null
+          }
+          return time
+        })
+        .filter((time: any) => !!time)
     },
   },
 })
