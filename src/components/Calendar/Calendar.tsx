@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react"
+import { useSelector, useDispatch } from 'react-redux'
+// import { SAVE_STATE } from 'redux/actions'
 import Tabs from "components/Tabs/Tabs"
 import cn from "classnames"
 
 import styles from './Calendar.module.scss'
+import { addAvailableTime } from "redux/reducers/eventsSlice"
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const DAYS_OF_WEEK = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
@@ -20,6 +23,11 @@ export const Calendar = () => {
   const [dayOffset, setDayOffset] = useState<number>(0)
   const [navigationData, setNavigationData] = useState<any>()
   const [selectedInfo, setSelectedInfo] = useState<any>({ selectedColumnIndex: 0, from: 0, to: 0 })
+  const [showPopup, setShowPopup] = useState(false)
+  const dispatch = useDispatch()
+  const availableTime = useSelector((s: any) => s.events.availableTime)
+
+  console.log('availableTime', availableTime)
 
   useEffect(() => {
     const today = new Date()
@@ -76,16 +84,18 @@ export const Calendar = () => {
   const mooving = useRef<any>({ selectedColumnIndex: 0, fromY: 0, toY: 0 })
 
   const mousedownHander = (event: any) => {
+    if (showPopup) return
     isMooving.current = true
     mooving.current = { ...mooving.current, selectedColumnIndex: +event.target.getAttribute('data-column'), fromY: event.target.offsetTop }
   }
 
   const mousemoveHandler = (event: any) => {
-    if (!isMooving.current) return
+    if (!isMooving.current || showPopup) return
     mooving.current = { ...mooving.current, toY: event.target.offsetTop }
   }
 
   const mouseupHander = (event: any) => {
+    if (showPopup) return
     mooving.current = { ...mooving.current, toY: event.target.offsetTop }
     const selectedCoordFrom = mooving.current.fromY - zeroPoint
     const selectedCoordTo = mooving.current.toY - zeroPoint
@@ -93,6 +103,19 @@ export const Calendar = () => {
     const to = selectedCoordTo >= selectedCoordFrom ? selectedCoordTo : selectedCoordFrom
     setSelectedInfo({ selectedColumnIndex: mooving.current.selectedColumnIndex, from, to })
     isMooving.current = false
+
+    setShowPopup(true)
+  }
+
+  const saveEventHandler = (data: any) => {
+    dispatch(addAvailableTime(data))
+    closePopup()
+  }
+
+  const closePopup = () => {
+    mooving.current = { selectedColumnIndex: 0, fromY: 0, toY: 0 }
+    setSelectedInfo({ selectedColumnIndex: 0, from: 0, to: 0 })
+    setShowPopup(false)
   }
 
   return (
@@ -181,6 +204,17 @@ export const Calendar = () => {
                           )
                         }
                       >
+                        {(columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from && showPopup) && (
+                          <>
+                            <div className={styles.abs} onClick={closePopup} />
+                            <div className={styles.popup}>
+                              <div className={styles.close} onClick={closePopup}>x</div>
+                              <div className={styles.top}>Now availability line</div>
+                              <div className={styles.time}>{DAYS_OF_WEEK[columndIndex]}, {TIMES[selectedInfo.from / ROW_HEIGHT] || '0 AM'} - {TIMES[selectedInfo.to / ROW_HEIGHT + 1]}</div>
+                              <div className={styles.save} onClick={() => saveEventHandler({ column: columndIndex + 1, rowFrom: selectedInfo.from / ROW_HEIGHT + 1, rowTo: selectedInfo.to / ROW_HEIGHT + 1 })}>Save</div>
+                            </div>
+                          </>
+                        )}
                         {(activeRow && activeColumn) && (
                           <div id="timeLine" className={styles.timeLine} />
                         )}
