@@ -8,6 +8,15 @@ interface ITimezoneProps {
   readonly name: string
 }
 
+const customStyles = {
+  option: (provided: any, state: any) => {
+    return {
+      ...provided,
+      background: state.isSelected ? '#8b5fff' : '',
+    };
+  },
+}
+
 const Timezone: FC<ITimezoneProps> = ({ name }) => {
   const [tz, setTz] = useState<any>(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
@@ -22,6 +31,7 @@ const Timezone: FC<ITimezoneProps> = ({ name }) => {
         return (
           <div className={styles.wrap}>
             <TimezoneSelect
+              styles={customStyles}
               value={tz}
               onChange={onTimezoneChange}
               labelStyle="altName"
