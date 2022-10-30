@@ -3,6 +3,12 @@
 .wrap {
   height: calc(100% - 50px);
   overflow-y: auto;
+  padding-bottom: 36px;
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .calendarWrap {
@@ -76,6 +82,43 @@
   border-right: 1px solid $gray;
   position: relative;
   cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;
+
+  &.selected {
+    &::after {
+      content: '';
+      background: $blue;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 1px);
+      z-index: 10;
+    }
+
+    &:hover {
+      background: white;
+    }
+  }
+
+  &.selectedFrom {
+    &::after {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+  }
+
+  &.selectedTo {
+    &::after {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
 
   &:hover {
     background: rgba(26, 115, 232, 0.2);

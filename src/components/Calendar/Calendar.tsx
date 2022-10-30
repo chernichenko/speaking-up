@@ -1,35 +1,43 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Tabs from "components/Tabs/Tabs"
 import cn from "classnames"
 
 import styles from './Calendar.module.scss'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const DAYS_OF_WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+const DAYS_OF_WEEK = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 const TIMES = ['', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11  AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11  PM']
 const DAYS_IN_WEEK = 7
 const MINUTES_IN_HOUR = 60
 const ROW_HEIGHT = 40
 
 export const Calendar = () => {
+  const mainWrap = useRef<any>()
+  const zeroPoint = mainWrap?.current?.offsetTop
   const [days, setDays] = useState<any[]>([])
   const [currentDay, setCurrentDay] = useState<any>({ day: 0, month: 0 })
   const [currentTime, setCurrentTime] = useState<any>({})
   const [dayOffset, setDayOffset] = useState<number>(0)
   const [navigationData, setNavigationData] = useState<any>()
+  const [selectedInfo, setSelectedInfo] = useState<any>({ selectedColumnIndex: 0, from: 0, to: 0 })
 
   useEffect(() => {
     const today = new Date()
-    today.setDate(today.getDate() + dayOffset)
+    setCurrentDay({ day: today.getDate(), month: today.getMonth(), year: today.getFullYear() })
+    setCurrentTime({ hours: today.getHours(), minutes: today.getMinutes() })
+  }, [])
 
-    // Only for Init
-    if (!dayOffset) {
-      setCurrentDay({ day: today.getDate(), month: today.getMonth(), year: today.getFullYear() })
-      setCurrentTime({ hours: today.getHours(), minutes: today.getMinutes() })
+  useEffect(() => {
+    const currentDayOfWeek = new Date()
+    if (!!currentDayOfWeek.getDay()) {
+      currentDayOfWeek.setDate(currentDayOfWeek.getDate() + dayOffset)
+    } else {
+      // If Sunday we go back
+      currentDayOfWeek.setDate(currentDayOfWeek.getDate() - 1 + dayOffset)
     }
 
     const newDays = DAYS_OF_WEEK.map((_, index) => {
-      const date = new Date(today.setDate(today.getDate() - today.getDay() + index))
+      const date = new Date(currentDayOfWeek.setDate(currentDayOfWeek.getDate() - currentDayOfWeek.getDay() + index + 1))
       return { day: date.getDate(), month: date.getMonth(), year: date.getFullYear() }
     })
     setDays(newDays)
@@ -61,12 +69,30 @@ export const Calendar = () => {
   }, [days])
 
   const onChangeWeekHandler = ({ prev }: any) => {
-    setDayOffset(offset => {
-      if (prev) {
-        return offset - DAYS_IN_WEEK
-      }
-      return offset + DAYS_IN_WEEK
-    })
+    setDayOffset(offset => prev ? offset - DAYS_IN_WEEK : offset + DAYS_IN_WEEK)
+  }
+
+  const isMooving = useRef(false)
+  const mooving = useRef<any>({ selectedColumnIndex: 0, fromY: 0, toY: 0 })
+
+  const mousedownHander = (event: any) => {
+    isMooving.current = true
+    mooving.current = { ...mooving.current, selectedColumnIndex: +event.target.getAttribute('data-column'), fromY: event.target.offsetTop }
+  }
+
+  const mousemoveHandler = (event: any) => {
+    if (!isMooving.current) return
+    mooving.current = { ...mooving.current, toY: event.target.offsetTop }
+  }
+
+  const mouseupHander = (event: any) => {
+    mooving.current = { ...mooving.current, toY: event.target.offsetTop }
+    const selectedCoordFrom = mooving.current.fromY - zeroPoint
+    const selectedCoordTo = mooving.current.toY - zeroPoint
+    const from = selectedCoordFrom <= selectedCoordTo ? selectedCoordFrom : selectedCoordTo
+    const to = selectedCoordTo >= selectedCoordFrom ? selectedCoordTo : selectedCoordFrom
+    setSelectedInfo({ selectedColumnIndex: mooving.current.selectedColumnIndex, from, to })
+    isMooving.current = false
   }
 
   return (
@@ -113,7 +139,13 @@ export const Calendar = () => {
               )
             })}
           </div>
-          <div className={styles.main}>
+          <div
+            className={styles.main}
+            ref={mainWrap}
+            onMouseDown={mousedownHander}
+            onMouseMove={mousemoveHandler}
+            onMouseUp={mouseupHander}
+          >
             {TIMES.map((time, rowIndex) => {
               const activeRow = currentTime.hours === rowIndex
               return (
@@ -131,14 +163,21 @@ export const Calendar = () => {
                   </div>
                   {DAYS_OF_WEEK.map((_, columndIndex) => {
                     const activeColumn = currentDay?.day === days[columndIndex]?.day && currentDay?.month === days[columndIndex]?.month
+                    const coordY = rowIndex * ROW_HEIGHT
                     return (
                       <div
                         key={columndIndex}
+                        id={`row${rowIndex + 1}-column${columndIndex + 1}`}
+                        data-column={columndIndex + 1}
                         className={
                           cn(
                             styles.column,
+                            "tableItem",
                             activeColumn && styles.activeColumn,
-                            columndIndex + 1 === DAYS_OF_WEEK.length && styles.last
+                            columndIndex + 1 === DAYS_OF_WEEK.length && styles.last,
+                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY >= selectedInfo.from && coordY <= selectedInfo.to) && styles.selected,
+                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from) && styles.selectedFrom,
+                            (columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.to) && styles.selectedTo,
                           )
                         }
                       >
