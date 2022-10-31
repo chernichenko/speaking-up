@@ -253,12 +253,8 @@ export const Calendar = () => {
                             "tableItem",
                             activeColumn && styles.activeColumn,
                             columndIndex + 1 === DAYS_OF_WEEK.length && styles.last,
-                            isSelected && styles.selected,
-                            isSelectedFrom && styles.selectedFrom,
-                            isSelectedTo && styles.selectedTo,
-                            !isSelected && isAvailable && styles.available,
-                            !isSelected && isAvailableFrom && styles.availableFrom,
-                            !isSelected && isAvailableTo && styles.availableTo,
+                            isSelected && styles.selectedColumn,
+                            isAvailable && styles.availableColumn,
                           )
                         }
                       >
@@ -275,6 +271,12 @@ export const Calendar = () => {
                         )}
                         {(activeRow && activeColumn) && (
                           <div id="timeLine" className={styles.timeLine} />
+                        )}
+                        {isSelected && (
+                          <div className={cn(styles.selected, isSelectedFrom && styles.selectedFrom, isSelectedTo && styles.selectedTo)} />
+                        )}
+                        {!isSelected && isAvailable && (
+                          <div className={cn(styles.available, isAvailableFrom && styles.availableFrom, isAvailableTo && styles.availableTo)} />
                         )}
                         {isAvailableFrom && (
                           <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
