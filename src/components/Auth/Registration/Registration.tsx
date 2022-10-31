@@ -22,7 +22,8 @@ const validationSchema = () => {
             .min(6, 'Too Short!')
             .required('Required'),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Required'),
     })
 }
 

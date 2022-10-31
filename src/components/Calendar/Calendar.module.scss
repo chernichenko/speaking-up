@@ -105,6 +105,7 @@
     width: 100%;
     height: calc(100% + 1px);
     z-index: 15;
+    pointer-events: none;
   }
 
   .selectedFrom {
@@ -127,6 +128,7 @@
     width: 100%;
     height: calc(100% + 1px);
     z-index: 10;
+    pointer-events: none;
   }
 
   .availableFrom {

@@ -107,8 +107,10 @@ export const Calendar = () => {
     const year = +event.target.getAttribute('data-year')
     const rowFrom = +(from / ROW_HEIGHT + 1)
     const rowTo = +(to / ROW_HEIGHT + 1)
+    console.log('from', from, 'to', to, 'rowFrom', rowFrom, 'rowTo', rowTo)
     availableTime?.forEach((time: any) => {
       const dayWithAvailableTime = time.day === day && time.month === month && time.year === year
+      console.log('time', time)
       if (
         dayWithAvailableTime &&
         ((rowFrom >= time.rowFrom && rowFrom <= time.rowTo) ||
