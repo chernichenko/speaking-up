@@ -2,8 +2,6 @@ import { Redirect } from 'react-router-dom'
 import {
   Login,
   Registration,
-  ChangePassword,
-  ChangePasswordSuccess,
   Profile,
   EmailConfirm,
   Events,
@@ -20,15 +18,6 @@ export const publicRoutes = [
   {
     path: '/registration',
     component: Registration,
-  },
-  {
-    path: '/password',
-    exact: true,
-    component: ChangePassword,
-  },
-  {
-    path: '/password/:token',
-    component: ChangePasswordSuccess,
   },
   {
     path: '/email-confirm',

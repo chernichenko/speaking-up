@@ -3,17 +3,28 @@
 .wrap {
     width: 100%;
     height: 100%;
+    padding-top: 80px;
+    padding-bottom: 36px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.formWrap {
+    width: 100%;
+    max-width: 420px;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .form {
     width: 100%;
-    max-width: 400px;
     padding: 25px;
     border: 1px solid white;
     background: white;
+    border-radius: 15px;
+    position: relative;
 }
 
 .forgot {
@@ -25,21 +36,19 @@
 }
 
 .bottom {
+    display: flex;
+    margin-top: 16px;
+
     p {
-        font-size: 12px;
-        margin-bottom: 5px;
-        color: $main;
+        margin: 0;
+        color: $gray;
+        font-size: 14px;
+        margin-right: 4px;
     }
     a {
-        color: $main;
-    }
-}
-
-.back {
-    margin-bottom: 20px;
-
-    a {
-        color: $main;
+        font-size: 14px;
+        color: black;
+        text-decoration: none;
     }
 }
 
@@ -62,10 +71,12 @@
     .googleButtonsWrap {
         button {
             width: 100%;
-            height: 35.5px;
+            height: 40px;
             text-align: center;
             display: flex;
             justify-content: center;
+            box-shadow: 0px 2px 16px 2px rgba(0, 0, 0, 0.25) !important;
+            color: black !important;
 
             > div {
                 padding: 2px !important;

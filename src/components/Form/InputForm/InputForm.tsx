@@ -27,8 +27,8 @@ export const InputForm: FC<IInputFormProps> = ({
   const isFile = type === 'file'
 
   return (
-    <Field name={name}>
-      {({ field, meta    }: IInputRender) => {
+    <Field name={name} autoComplete="off">
+      {({ field, meta }: IInputRender) => {
 
         const onFileChangeHandler = (e: any) => {
           const file = e.target.files[0]
@@ -49,6 +49,7 @@ export const InputForm: FC<IInputFormProps> = ({
               {...field}
               onChange={isFile ? onFileChangeHandler : field.onChange}
               data-testid="form-input"
+              autoComplete="nope"
             />
             {isFile && (
               <label className={styles.label} htmlFor={'file'}>

@@ -35,9 +35,6 @@ const App = () => {
           {isPublickRoutes ? publicRoutesRender : privateRoutesRender}
         </Switch>
       </div>
-      <div className={styles.mob}>
-        <h1>There is no mobile version</h1>
-      </div>
     </div>
   )
 }

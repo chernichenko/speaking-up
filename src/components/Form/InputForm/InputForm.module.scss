@@ -28,12 +28,12 @@
 }
 
 .error {
-    border: 1px solid red;
-    color: red;
+    border: 1px solid $red;
+    color: $red;
 }
 
 .errorMessage {
     font-size: 14px;
-    color: red;
+    color: $red;
     margin-top: 10px;
 }

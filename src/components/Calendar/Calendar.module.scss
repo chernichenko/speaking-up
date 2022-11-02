@@ -183,14 +183,14 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background: red;
+        background: $red;
 
         &::after {
           content: '';
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: red;
+          background: $red;
           position: absolute;
           top: 50%;
           left: 0;
