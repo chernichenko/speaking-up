@@ -26,3 +26,11 @@ code {
 * {
   box-sizing: border-box;
 }
+
+.Toastify__toast-body {
+  color: #62D081;
+}
+
+.Toastify__toast--error .Toastify__toast-body {
+  color: white;
+}

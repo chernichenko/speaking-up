@@ -28,6 +28,8 @@ export const Calendar = () => {
   const dispatch = useDispatch()
   const availableTime = useSelector((s: any) => s.events.availableTime)
 
+  console.log('availableTime', availableTime)
+
   useEffect(() => {
     const today = new Date()
     setCurrentDay({ day: today.getDate(), month: today.getMonth(), year: today.getFullYear() })
@@ -107,10 +109,8 @@ export const Calendar = () => {
     const year = +event.target.getAttribute('data-year')
     const rowFrom = +(from / ROW_HEIGHT + 1)
     const rowTo = +(to / ROW_HEIGHT + 1)
-    console.log('from', from, 'to', to, 'rowFrom', rowFrom, 'rowTo', rowTo)
     availableTime?.forEach((time: any) => {
       const dayWithAvailableTime = time.day === day && time.month === month && time.year === year
-      console.log('time', time)
       if (
         dayWithAvailableTime &&
         ((rowFrom >= time.rowFrom && rowFrom <= time.rowTo) ||
@@ -231,12 +231,14 @@ export const Calendar = () => {
                       availableTimeItem.year === days[columndIndex]?.year &&
                       rowIndex + 1 === availableTimeItem.rowFrom
                     )
+                    console.log('isAvailableFrom', isAvailableFrom)
                     const isAvailableTo = availableTime.find((availableTimeItem: any) =>
                       availableTimeItem.day === days[columndIndex]?.day &&
                       availableTimeItem.month === days[columndIndex]?.month &&
                       availableTimeItem.year === days[columndIndex]?.year &&
                       rowIndex + 1 === availableTimeItem.rowTo
                     )
+                    console.log('isAvailableTo', isAvailableTo)
                     const coordY = rowIndex * ROW_HEIGHT
                     const isSelected = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY >= selectedInfo.from && coordY <= selectedInfo.to
                     const isSelectedFrom = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from
@@ -281,7 +283,10 @@ export const Calendar = () => {
                           <div className={cn(styles.available, isAvailableFrom && styles.availableFrom, isAvailableTo && styles.availableTo)} />
                         )}
                         {isAvailableFrom && (
-                          <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
+                          <>
+                            <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
+                            <div className={styles.time}>{TIMES[isAvailableFrom.rowFrom - 1] || '0 AM'} - {TIMES[isAvailableFrom.rowTo]}</div>
+                          </>
                         )}
                       </div>
                     )

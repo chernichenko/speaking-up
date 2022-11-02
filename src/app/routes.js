@@ -6,6 +6,7 @@ import {
   EmailConfirm,
   Events,
   Calendar,
+  SendFeedback,
 } from 'components'
 import { MainLayout } from 'layouts'
 
@@ -51,6 +52,11 @@ export const privateRoutes = [
     path: '/calendar',
     exact: true,
     component: Calendar,
+    layout: MainLayout,
+  },
+  {
+    path: '/send-feedback',
+    component: SendFeedback,
     layout: MainLayout,
   },
   {

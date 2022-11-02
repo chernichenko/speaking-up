@@ -37,7 +37,7 @@ export const InputForm: FC<IInputFormProps> = ({
         }
 
         return (
-          <div className={cn(styles.inputWrapper, extraClass)}>
+          <div className={cn(styles.inputWrapper, extraClass, isFile && styles.fileWrapper)}>
             <input
               id={isFile ? 'file' : null}
               className={cn(styles.input, {
@@ -54,8 +54,8 @@ export const InputForm: FC<IInputFormProps> = ({
             {isFile && (
               <label className={styles.label} htmlFor={'file'}>
                 {field.value
-                  ? 'Photo added successfuly'
-                  : 'Add photo +'
+                  ? 'Photo added'
+                  : 'Change Photo'
                 }
                 </label>
             )}

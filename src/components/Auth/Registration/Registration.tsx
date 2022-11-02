@@ -31,7 +31,7 @@ const validationSchema = () => {
 
 export const Registration = () => {
     const { onGoogleFailure } = useGoogle()
-    const [step, setStep] = useState<number>(2)
+    const [step, setStep] = useState<number>(1)
 
     const onSubmit = async (values: any) => {
         try {

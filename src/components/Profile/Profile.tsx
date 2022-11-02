@@ -63,48 +63,50 @@ export const Profile = () => {
 
     return (
         <div className={cn(authStyles.wrap, styles.wrap)} data-testid="profile">
-            <Formik
-                initialValues={{
-                    email: user.email,
-                    name: user.name,
-                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    file: '',
-                }}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}
-            >
-                {({ isValid, dirty, handleSubmit }) => {
-                    return (
-                        <Form className={authStyles.form}>
-                            <InputForm
-                                name={'email'}
-                                type={'email'}
-                                placeholder={'Edit your email'}
-                            />
-                            <InputForm
-                                name={'name'}
-                                type={'name'}
-                                placeholder={'Edit your new name'}
-                            />
-                            <Timezone
-                                name={'timezone'}
-                            />
-                            <InputForm
-                                name={'file'}
-                                type={'file'}
-                                onFileChange={setFile}
-                            />
+            <div className={authStyles.formWrap}>
+                <Formik
+                    initialValues={{
+                        email: user.email,
+                        name: user.name,
+                        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                        file: '',
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={onSubmit}
+                >
+                    {({ isValid, dirty, handleSubmit }) => {
+                        return (
+                            <Form className={authStyles.form}>
+                                <InputForm
+                                    name={'email'}
+                                    type={'email'}
+                                    placeholder={'Edit your email'}
+                                />
+                                <InputForm
+                                    name={'name'}
+                                    type={'name'}
+                                    placeholder={'Edit your new name'}
+                                />
+                                <Timezone
+                                    name={'timezone'}
+                                />
+                                <InputForm
+                                    name={'file'}
+                                    type={'file'}
+                                    onFileChange={setFile}
+                                />
 
-                            <Button
-                                onClick={handleSubmit}
-                                type={'submit'}
-                            >
-                                Change Info
-                            </Button>
-                        </Form>
-                    )
-                }}
-            </Formik>
+                                <Button
+                                    onClick={handleSubmit}
+                                    type={'submit'}
+                                >
+                                    Save changes
+                                </Button>
+                            </Form>
+                        )
+                    }}
+                </Formik>
+            </div>
         </div>
     )
 }

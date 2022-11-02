@@ -1,7 +1,7 @@
 @import 'assets/default/vars.scss';
 
 .wrap {
-  height: calc(100% - 50px);
+  height: calc(100% - 60px);
   padding: 0 30px;
   overflow-y: auto;
   padding-bottom: 36px;
@@ -97,8 +97,20 @@
     }
   }
 
+  &.availableColumn {
+    .time {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      z-index: 50;
+      font-size: 12px;
+    }
+  }
+
   .selected {
-    background: $blue !important;
+    background: rgb(221, 221, 221) !important;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     position: absolute;
     top: 0;
     left: 0;
@@ -111,11 +123,13 @@
   .selectedFrom {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    border-top: 1px solid black;
   }
 
   .selectedTo {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    border-bottom: 1px solid black;
   }
 
   .available {

@@ -1,6 +1,9 @@
+@import 'assets/default/vars.scss';
+
 .wrap {
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     overflow-y: auto;
+    padding: 30px;
 }
 
 .eventsWrap {
@@ -13,6 +16,27 @@
     margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
+    border-radius: 15px;
+
+    &.fullWidth {
+        .column1Inner {
+            width: auto;
+        }
+    }
+
+    &.new {
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.4);
+
+        .column1Inner {
+            align-items: center;
+        }
+
+        .text {
+            color: $gray;
+            font-size: 24px;
+        }
+    }
 }
 
 .time {
@@ -25,6 +49,11 @@
     align-items: center;
 }
 
+.column1Inner {
+    display: flex;
+    width: 300px;
+}
+
 .button {
     margin-right: 10px;
     cursor: pointer;
@@ -33,16 +62,51 @@
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     background: blueviolet;
     border-radius: 50%;
+    margin-right: 8px;
+}
+
+.date {
+    font-size: 20px;
+}
+
+.name {
+    color: $gray;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+.time {
+    font-size: 20px;
+}
+
+.column2 {
+    font-size: 14px;
+
+    .primary {
+        margin-right: 24px;
+        padding: 10px 15px;
+        border-radius: 25px;
+        background: $blue;
+        color: white;
+    }
+
+    .button {
+        color: $gray;
+    }
 }
 
 .getMoreWrap {
     width: 100%;
+    padding: 10px 20px;
+    background: white;
+    margin-bottom: 16px;
+    border-radius: 15px;
     display: flex;
-    justify-content: flex-end;    
+    justify-content: space-between;
 }
 
 .getMore {
