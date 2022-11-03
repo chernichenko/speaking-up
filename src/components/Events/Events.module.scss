@@ -18,9 +18,22 @@
     justify-content: space-between;
     border-radius: 15px;
 
-    &.fullWidth {
+    &.findingNewMeeting {
         .column1Inner {
             width: auto;
+        }
+
+        .avatar {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(196, 196, 196);
+
+            svg {
+                width: 60%;
+                height: auto;
+            }
         }
     }
 
