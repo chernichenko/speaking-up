@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 export const initialState = {
   availableTime: [],
   events: [
-    { id: '1', day: 'Sunday', timeFrom: '18:00', timeTo: '18:30', user: { name: 'Alex', avatar: '' } },
-    { id: '2', day: 'Monday', timeFrom: '14:00', timeTo: '15:30', user: { name: 'Andrew', avatar: '' } },
-    { id: '3', day: 'Friday', timeFrom: '22:00', timeTo: '22:30', user: { name: 'Tom', avatar: '' } },
+    { id: '1', day: 'Nov 1, Wednesday', timeFrom: '18:00', timeTo: '18:30', user: { name: 'dmitry.gorchkov@gmail.com', avatar: '' } },
+    { id: '2', day: 'Nov 2, Thursday', timeFrom: '14:00', timeTo: '15:30', user: { name: 'lenya#2134', avatar: '' } },
+    { id: '3', day: 'Nov 4, Saturday', timeFrom: '22:00', timeTo: '22:30', user: { name: 'dima#1144', avatar: '' } },
   ],
   eventsPerWeek: 3,
 }

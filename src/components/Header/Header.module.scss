@@ -1,10 +1,17 @@
+@import 'assets/default/vars.scss';
+
 .header {
     width: 100%;
-    height: 50px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: white;
+    background: white;
+    padding: 0 20px;
+    color: black;
+    position: relative;
+    z-index: 50;
 
     &::after {
         content: '';
@@ -40,10 +47,51 @@
 .nav {
     display: flex;
     align-items: center;
+    transform: translateX(15px);
 
     a {
-        color: white;
+        color: black;
         display: block;
         margin-left: 20px;
+        text-decoration: none;
+
+        span {
+            color: $red;
+            display: inline-block;
+            margin-right: 3px;
+        }
+    }
+
+    .avatar {
+        padding: 15px;
+        position: relative;
+        cursor: pointer;
+
+        .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: $main;
+        }
+
+        .dropdown {
+            position: absolute;
+            padding: 15px;
+            background: white;
+            top: 100%;
+            right: 0;
+            text-align: left;
+            cursor: auto;
+            z-index: 40;
+
+            a {
+                margin: 0;
+                color: $gray;
+
+                &:first-child {
+                    margin-bottom: 5px;
+                }
+            }
+        }
     }
 }

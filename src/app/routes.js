@@ -2,12 +2,11 @@ import { Redirect } from 'react-router-dom'
 import {
   Login,
   Registration,
-  ChangePassword,
-  ChangePasswordSuccess,
   Profile,
   EmailConfirm,
   Events,
   Calendar,
+  SendFeedback,
 } from 'components'
 import { MainLayout } from 'layouts'
 
@@ -20,15 +19,6 @@ export const publicRoutes = [
   {
     path: '/registration',
     component: Registration,
-  },
-  {
-    path: '/password',
-    exact: true,
-    component: ChangePassword,
-  },
-  {
-    path: '/password/:token',
-    component: ChangePasswordSuccess,
   },
   {
     path: '/email-confirm',
@@ -62,6 +52,11 @@ export const privateRoutes = [
     path: '/calendar',
     exact: true,
     component: Calendar,
+    layout: MainLayout,
+  },
+  {
+    path: '/send-feedback',
+    component: SendFeedback,
     layout: MainLayout,
   },
   {

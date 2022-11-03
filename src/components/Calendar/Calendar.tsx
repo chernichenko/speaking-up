@@ -28,6 +28,8 @@ export const Calendar = () => {
   const dispatch = useDispatch()
   const availableTime = useSelector((s: any) => s.events.availableTime)
 
+  console.log('availableTime', availableTime)
+
   useEffect(() => {
     const today = new Date()
     setCurrentDay({ day: today.getDate(), month: today.getMonth(), year: today.getFullYear() })
@@ -229,12 +231,14 @@ export const Calendar = () => {
                       availableTimeItem.year === days[columndIndex]?.year &&
                       rowIndex + 1 === availableTimeItem.rowFrom
                     )
+                    console.log('isAvailableFrom', isAvailableFrom)
                     const isAvailableTo = availableTime.find((availableTimeItem: any) =>
                       availableTimeItem.day === days[columndIndex]?.day &&
                       availableTimeItem.month === days[columndIndex]?.month &&
                       availableTimeItem.year === days[columndIndex]?.year &&
                       rowIndex + 1 === availableTimeItem.rowTo
                     )
+                    console.log('isAvailableTo', isAvailableTo)
                     const coordY = rowIndex * ROW_HEIGHT
                     const isSelected = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY >= selectedInfo.from && coordY <= selectedInfo.to
                     const isSelectedFrom = columndIndex + 1 === selectedInfo.selectedColumnIndex && coordY === selectedInfo.from
@@ -253,12 +257,8 @@ export const Calendar = () => {
                             "tableItem",
                             activeColumn && styles.activeColumn,
                             columndIndex + 1 === DAYS_OF_WEEK.length && styles.last,
-                            isSelected && styles.selected,
-                            isSelectedFrom && styles.selectedFrom,
-                            isSelectedTo && styles.selectedTo,
-                            !isSelected && isAvailable && styles.available,
-                            !isSelected && isAvailableFrom && styles.availableFrom,
-                            !isSelected && isAvailableTo && styles.availableTo,
+                            isSelected && styles.selectedColumn,
+                            isAvailable && styles.availableColumn,
                           )
                         }
                       >
@@ -276,8 +276,17 @@ export const Calendar = () => {
                         {(activeRow && activeColumn) && (
                           <div id="timeLine" className={styles.timeLine} />
                         )}
+                        {isSelected && (
+                          <div className={cn(styles.selected, isSelectedFrom && styles.selectedFrom, isSelectedTo && styles.selectedTo)} />
+                        )}
+                        {!isSelected && isAvailable && (
+                          <div className={cn(styles.available, isAvailableFrom && styles.availableFrom, isAvailableTo && styles.availableTo)} />
+                        )}
                         {isAvailableFrom && (
-                          <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
+                          <>
+                            <div className={styles.removeAvailableTime} onClick={() => removeAvailableTimeHandler({ ...days[columndIndex], rowFrom: availableItem.rowFrom, rowTo: availableItem.rowTo })}>x</div>
+                            <div className={styles.time}>{TIMES[isAvailableFrom.rowFrom - 1] || '0 AM'} - {TIMES[isAvailableFrom.rowTo]}</div>
+                          </>
                         )}
                       </div>
                     )

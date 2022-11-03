@@ -43,6 +43,7 @@ export const Login = () => {
 
     return (
         <div className={styles.wrap} data-testid="login">
+            <div className={styles.formWrap}>
             <Formik
                 initialValues={{ email: '', password: '' }}
                 validationSchema={validationSchema}
@@ -54,12 +55,12 @@ export const Login = () => {
                             <InputForm
                                 name={'email'}
                                 type={'email'}
-                                placeholder={'Enter your email'}
+                                placeholder={'Email'}
                             />
                             <InputForm
                                 name={'password'}
                                 type={'password'}
-                                placeholder={'Enter your password'}
+                                placeholder={'Password'}
                             />
 
                             {/* <div className={styles.forgot}>
@@ -91,12 +92,13 @@ export const Login = () => {
 
                             <div className={styles.bottom}>
                                 <p>Don't have an account?</p>
-                                <Link to="/registration">Registration</Link>
+                                <Link to="/registration">Sign up now</Link>
                             </div>
                         </Form>
                     )
                 }}
             </Formik>
+            </div>
         </div>
     )
 }
